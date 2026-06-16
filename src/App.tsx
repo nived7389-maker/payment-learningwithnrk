@@ -12,12 +12,26 @@ export default function App() {
   const [step, setStep] = useState<Step>(() => {
     const savedStep = localStorage.getItem('currentStep') as Step;
     if (savedStep === 'success') {
-      localStorage.setItem('currentStep', 'form');
+      localStorage.removeItem('currentStep');
+      localStorage.removeItem('formData');
       return 'form';
     }
     return savedStep || 'form';
   });
+
   const [formData, setFormData] = useState<FormData>(() => {
+    const savedStep = localStorage.getItem('currentStep');
+    if (savedStep === 'success') {
+      localStorage.removeItem('formData');
+      return {
+        selectedClass: null,
+        stream: null,
+        loginName: '',
+        phoneNumber: '',
+        txnId: '',
+        payerUpiId: ''
+      };
+    }
     const saved = localStorage.getItem('formData');
     return saved ? JSON.parse(saved) : {
       selectedClass: null,
@@ -43,17 +57,15 @@ export default function App() {
   };
 
   const resetForm = () => {
-    const emptyData: FormData = {
+    setFormData({
       selectedClass: null,
       stream: null,
       loginName: '',
       phoneNumber: '',
       txnId: '',
       payerUpiId: ''
-    };
-    setFormData(emptyData);
-    localStorage.setItem('formData', JSON.stringify(emptyData));
-    handleSetStep('form');
+    });
+    setStep('form');
   };
 
   return (
