@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Users, FileText, Activity, AlertTriangle, Trash2, X, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Users, FileText, Activity, AlertTriangle, Trash2, X, CheckCircle, RefreshCw } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, query, orderBy, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 
@@ -107,17 +107,27 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
       exit={{ opacity: 0, y: -20 }}
       className="max-w-4xl w-full mx-auto p-4 md:p-8 space-y-6"
     >
-      <div className="flex items-center gap-4 bg-[#0a0f1c] p-4 rounded-2xl border border-white/5 shadow-lg">
-        <button 
-          onClick={onBack}
-          className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors"
-        >
-          <ArrowLeft size={20} />
-        </button>
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Admin Dashboard</h2>
-          <p className="text-slate-400 font-medium">Payment Records Overview</p>
+      <div className="flex items-center justify-between gap-4 bg-[#0a0f1c] p-4 rounded-2xl border border-white/5 shadow-lg">
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={onBack}
+            className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <div>
+            <h2 className="text-2xl font-bold text-white tracking-tight">Admin Dashboard</h2>
+            <p className="text-slate-400 font-medium">Payment Records Overview</p>
+          </div>
         </div>
+        <button 
+          onClick={fetchRecords}
+          disabled={loading}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 rounded-xl transition-colors border border-blue-500/20 disabled:opacity-50"
+        >
+          <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+          <span className="hidden sm:inline font-medium">Refresh Data</span>
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
