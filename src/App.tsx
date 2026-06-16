@@ -11,29 +11,21 @@ import { AdminDashboardStep } from './components/AdminDashboardStep';
 export default function App() {
   const [step, setStep] = useState<Step>(() => {
     const savedStep = localStorage.getItem('currentStep') as Step;
-    if (savedStep === 'success') {
-      localStorage.removeItem('currentStep');
-      localStorage.removeItem('formData');
-      return 'form';
+    if (savedStep === 'payment') {
+      return 'payment';
     }
-    return savedStep || 'form';
+    localStorage.removeItem('currentStep');
+    localStorage.removeItem('formData');
+    return 'form';
   });
 
   const [formData, setFormData] = useState<FormData>(() => {
     const savedStep = localStorage.getItem('currentStep');
-    if (savedStep === 'success') {
-      localStorage.removeItem('formData');
-      return {
-        selectedClass: null,
-        stream: null,
-        loginName: '',
-        phoneNumber: '',
-        txnId: '',
-        payerUpiId: ''
-      };
+    if (savedStep === 'payment') {
+      const saved = localStorage.getItem('formData');
+      if (saved) return JSON.parse(saved);
     }
-    const saved = localStorage.getItem('formData');
-    return saved ? JSON.parse(saved) : {
+    return {
       selectedClass: null,
       stream: null,
       loginName: '',
@@ -53,7 +45,11 @@ export default function App() {
 
   const handleSetStep = (newStep: Step) => {
     setStep(newStep);
-    localStorage.setItem('currentStep', newStep);
+    if (newStep === 'payment') {
+      localStorage.setItem('currentStep', 'payment');
+    } else {
+      localStorage.removeItem('currentStep');
+    }
   };
 
   const resetForm = () => {
@@ -65,6 +61,8 @@ export default function App() {
       txnId: '',
       payerUpiId: ''
     });
+    localStorage.removeItem('formData');
+    localStorage.removeItem('currentStep');
     setStep('form');
   };
 
