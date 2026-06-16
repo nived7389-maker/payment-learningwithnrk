@@ -1,0 +1,6 @@
+{
+  "name": "NRK Payment Portal",
+  "description": "Payment and registration portal for learning with NRK.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
