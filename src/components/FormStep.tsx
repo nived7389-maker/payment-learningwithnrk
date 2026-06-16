@@ -51,16 +51,16 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
           className="relative inline-block cursor-pointer"
           onClick={handleLogoClick}
         >
-          <div className="absolute inset-0 bg-amber-500/20 rounded-full blur-xl scale-150 animate-pulse"></div>
+          <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl scale-150 animate-pulse"></div>
           <img 
             src="https://yt3.ggpht.com/IArEytZ_TtPVq8bJ5qloBWIDQBFqBhWnr9yL01OOERZfgkVCEOq4_BYAnioWBh9juvkIK6ABKU_v=s690-nd-v1" 
             alt="NRK Logo" 
-            className="relative w-28 h-28 mx-auto rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)] border-4 border-amber-500/30 object-cover"
+            className="relative w-28 h-28 mx-auto rounded-full shadow-[0_0_20px_rgba(59,130,246,0.5)] border-4 border-blue-500/30 object-cover"
           />
         </motion.div>
         <div className="space-y-2">
-          <h1 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 tracking-tight leading-tight">
-            Learning with the NRK <br/> payment method
+          <h1 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-blue-500 tracking-tight leading-tight">
+            Learning with nrk <br/> payment method
           </h1>
           <div className="flex items-center justify-center gap-1.5 text-emerald-400 font-medium text-sm mt-2">
             <ShieldCheck size={16} />
@@ -78,7 +78,7 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
               onClick={() => handleClassSelection('+1')}
               className={`p-3.5 rounded-2xl border font-medium transition-all duration-300 ${
                 data.selectedClass === '+1' 
-                  ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.2)]' 
+                  ? 'bg-blue-500/20 border-blue-400 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.2)]' 
                   : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:border-white/20'
               }`}
             >
@@ -112,7 +112,7 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
               onClick={() => updateData({ stream: 'biology science' })}
               className={`p-3.5 rounded-2xl border font-medium flex flex-col items-center justify-center gap-1 transition-all duration-300 ${
                 data.stream === 'biology science'
-                  ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.2)]' 
+                  ? 'bg-blue-500/20 border-blue-400 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.2)]' 
                   : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:border-white/20'
               }`}
             >
@@ -123,7 +123,7 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
               onClick={() => updateData({ stream: 'computer science' })}
               className={`p-3.5 rounded-2xl border font-medium flex flex-col items-center justify-center gap-1 transition-all duration-300 ${
                 data.stream === 'computer science'
-                  ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.2)]' 
+                  ? 'bg-blue-500/20 border-blue-400 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.2)]' 
                   : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:border-white/20'
               }`}
             >
@@ -139,7 +139,7 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
             placeholder="Enter your exact login name"
             value={data.loginName}
             onChange={(e) => updateData({ loginName: e.target.value })}
-            className="w-full bg-[#090b14] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-400 transition-all shadow-inner"
+            className="w-full bg-[#090b14] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all shadow-inner"
           />
         </div>
 
@@ -150,7 +150,7 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
             placeholder="Enter mobile number for activation"
             value={data.phoneNumber}
             onChange={(e) => updateData({ phoneNumber: e.target.value })}
-            className="w-full bg-[#090b14] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-400 transition-all shadow-inner"
+            className="w-full bg-[#090b14] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all shadow-inner"
           />
         </div>
       </div>
@@ -160,7 +160,7 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
           whileTap={isFormValid ? { scale: 0.97 } : {}}
           onClick={onNext}
           disabled={!isFormValid}
-          className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-amber-600 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-900 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:shadow-[0_0_30px_rgba(245,158,11,0.6)]"
+          className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-600 bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]"
         >
           Next Step <ChevronRight size={20} strokeWidth={3} />
         </motion.button>

@@ -54,7 +54,7 @@ export function ProcessingStep({ onComplete }: ProcessingStepProps) {
       </motion.div>
       
       <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">100% Secure Payment</h2>
-      <p className="text-amber-200/80 text-center max-w-xs mb-4">
+      <p className="text-blue-200/80 text-center max-w-xs mb-4">
         Processing your transaction... {processTime > 0 ? `(${processTime}s)` : ''}
       </p>
 
@@ -71,12 +71,12 @@ export function ProcessingStep({ onComplete }: ProcessingStepProps) {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative bg-[#0a0f1c] border border-amber-500/20 p-8 rounded-3xl shadow-[0_0_40px_-10px_rgba(245,158,11,0.3)] max-w-sm w-full space-y-5 text-center"
+              className="relative bg-[#0a0f1c] border border-blue-500/20 p-8 rounded-3xl shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)] max-w-sm w-full space-y-5 text-center"
             >
-              <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 mx-auto mb-4 border border-amber-500/30">
+              <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500 mx-auto mb-4 border border-blue-500/30">
                 <Clock size={32} />
               </div>
-              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 tracking-tight">100% Secure Payment</h3>
+              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-blue-500 tracking-tight">100% Secure Payment</h3>
               <p className="text-slate-300 leading-relaxed text-sm">
                 Activation will occur within 4 to 6 hours.
               </p>
@@ -86,7 +86,7 @@ export function ProcessingStep({ onComplete }: ProcessingStepProps) {
                     initial={{ width: "0%" }}
                     animate={{ width: "100%" }}
                     transition={{ duration: 3, ease: "linear" }}
-                    className="h-full bg-gradient-to-r from-amber-600 to-yellow-500"
+                    className="h-full bg-gradient-to-r from-blue-600 to-blue-400"
                   />
                 </div>
               </div>

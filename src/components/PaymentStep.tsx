@@ -18,7 +18,6 @@ export function PaymentStep({ data, updateData, onNext, onBack }: PaymentStepPro
     const targetLink = appScheme === 'gpay' ? 'gpay://upi/pay?pa=nivednrk@fam&pn=%20&am=199&cu=INR' :
                        appScheme === 'phonepe' ? 'phonepe://pay?pa=nivednrk@fam&pn=%20&am=199&cu=INR' :
                        appScheme === 'paytm' ? 'paytmmp://pay?pa=nivednrk@fam&pn=%20&am=199&cu=INR' :
-                       appScheme === 'fampay' ? 'fampay://pay?pa=nivednrk@fam&pn=%20&am=199&cu=INR' :
                        upiLink;
     window.location.assign(targetLink);
     setShowUpiApps(false);
@@ -185,16 +184,6 @@ export function PaymentStep({ data, updateData, onNext, onBack }: PaymentStepPro
                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" alt="Paytm" className="w-full h-full object-contain" />
                   </div>
                   <span className="font-bold text-lg text-white">Paytm</span>
-                </button>
-
-                <button 
-                  onClick={() => handleUpiAppSelect('fampay')}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-left"
-                >
-                  <div className="w-12 h-12 bg-[#fbd431] rounded-xl shadow-md p-1 flex items-center justify-center">
-                     <span className="font-black text-black text-xl italic">Fam</span>
-                  </div>
-                  <span className="font-bold text-lg text-white">FamPay</span>
                 </button>
 
                 <button 
