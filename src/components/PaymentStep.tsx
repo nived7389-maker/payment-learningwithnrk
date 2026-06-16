@@ -4,6 +4,7 @@ import { FormData } from '../types';
 import { ArrowLeft, QrCode, ScanLine, X } from 'lucide-react';
 
 interface PaymentStepProps {
+  key?: string;
   data: FormData;
   updateData: (data: Partial<FormData>) => void;
   onNext: () => void;
@@ -200,6 +201,8 @@ export function PaymentStep({ data, updateData, onNext, onBack }: PaymentStepPro
           </motion.div>
         )}
       </AnimatePresence>
+
+
     </motion.div>
   );
 }

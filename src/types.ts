@@ -7,6 +7,7 @@ export interface FormData {
   phoneNumber: string;
   txnId: string;
   payerUpiId: string;
+  status?: string;
 }
 
 export interface PaymentRecord extends FormData {

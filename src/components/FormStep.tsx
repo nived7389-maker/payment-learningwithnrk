@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'motion/react';
 import { FormData } from '../types';
 import { ChevronRight, AlertCircle, ShieldCheck } from 'lucide-react';
 
 interface FormStepProps {
+  key?: string;
   data: FormData;
   updateData: (data: Partial<FormData>) => void;
   onNext: () => void;
@@ -13,6 +14,7 @@ interface FormStepProps {
 export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepProps) {
   const [classError, setClassError] = useState(false);
   const [clickCount, setClickCount] = useState(0);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleClassSelection = (cls: '+1' | '+2') => {
     if (cls === '+2') {
@@ -29,9 +31,18 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
   const handleLogoClick = () => {
     const newCount = clickCount + 1;
     setClickCount(newCount);
+
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+
     if (newCount >= 6) {
       onAdminAccess();
       setClickCount(0); // reset
+    } else {
+      clickTimeoutRef.current = setTimeout(() => {
+        setClickCount(0);
+      }, 2000);
     }
   };
 
@@ -51,11 +62,10 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
           className="relative inline-block cursor-pointer"
           onClick={handleLogoClick}
         >
-          <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl scale-150 animate-pulse"></div>
           <img 
             src="https://yt3.ggpht.com/IArEytZ_TtPVq8bJ5qloBWIDQBFqBhWnr9yL01OOERZfgkVCEOq4_BYAnioWBh9juvkIK6ABKU_v=s690-nd-v1" 
             alt="NRK Logo" 
-            className="relative w-28 h-28 mx-auto rounded-full shadow-[0_0_20px_rgba(59,130,246,0.5)] border-4 border-blue-500/30 object-cover"
+            className="relative h-28 mx-auto object-contain"
           />
         </motion.div>
         <div className="space-y-2">
@@ -145,13 +155,22 @@ export function FormStep({ data, updateData, onNext, onAdminAccess }: FormStepPr
 
         <div className="space-y-3">
           <label className="text-sm font-semibold text-slate-300">4. App Sign-in Phone Number</label>
-          <input 
-            type="tel" 
-            placeholder="Enter mobile number for activation"
-            value={data.phoneNumber}
-            onChange={(e) => updateData({ phoneNumber: e.target.value })}
-            className="w-full bg-[#090b14] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all shadow-inner"
-          />
+          <div className="flex bg-[#090b14] border border-white/10 rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:border-blue-400 transition-all shadow-inner relative">
+            <div className="absolute left-0 top-0 bottom-0 flex items-center justify-center pl-5 pr-3 text-slate-400 font-medium border-r border-white/10 bg-white/5 pointer-events-none">
+              +91
+            </div>
+            <input 
+              type="tel" 
+              maxLength={10}
+              placeholder="Enter 10-digit number"
+              value={data.phoneNumber.replace(/^\+91\s*/, '')}
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                updateData({ phoneNumber: `+91 ${val}` });
+              }}
+              className="w-full bg-transparent pl-[4.5rem] pr-5 py-4 text-white placeholder:text-slate-600 focus:outline-none tracking-wider"
+            />
+          </div>
         </div>
       </div>
 

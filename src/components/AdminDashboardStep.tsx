@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Users, FileText, Activity, AlertTriangle, Trash2, X } from 'lucide-react';
+import { ArrowLeft, Users, FileText, Activity, AlertTriangle, Trash2, X, CheckCircle } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, query, orderBy, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 
 interface AdminDashboardStepProps {
+  key?: string;
   onBack: () => void;
 }
 
@@ -51,7 +52,6 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
     if (window.confirm("Are you sure you want to delete this payment record?")) {
       try {
         await deleteDoc(doc(db, "payments", id));
-        // Also remove from localstorage
         const localRecords = JSON.parse(localStorage.getItem('payments') || '[]');
         const updatedLocal = localRecords.filter((r: any) => r.id !== id);
         localStorage.setItem('payments', JSON.stringify(updatedLocal));
@@ -59,6 +59,31 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
       } catch (err) {
         console.error("Error deleting document", err);
       }
+    }
+  };
+
+  const handleVerify = async (record: any) => {
+    try {
+      if (record.id.length > 20) {
+        // Firebase record
+        await updateDoc(doc(db, "payments", record.id), {
+          status: 'Successful'
+        });
+      }
+      
+      const localRecords = JSON.parse(localStorage.getItem('payments') || '[]');
+      const updatedLocal = localRecords.map((r: any) => r.id === record.id ? { ...r, status: 'Successful' } : r);
+      localStorage.setItem('payments', JSON.stringify(updatedLocal));
+      
+      const updatedRecord = { ...record, status: 'Successful' };
+      setSelectedRecord(updatedRecord);
+      setRecords(records.map(r => r.id === record.id ? updatedRecord : r));
+
+      const phone = record.phoneNumber.replace(/[^\d]/g, '');
+      const message = "Your payment is verified successfully. We are processing your subscription.";
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+    } catch (err) {
+      console.error("Error updating status", err);
     }
   };
 
@@ -191,10 +216,17 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
                       {record.txnId}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-                        Successful
-                      </span>
+                      {record.status === 'Successful' ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                          Successful
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                          Pending
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -254,10 +286,20 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
                   </div>
                   <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
                     <span className="text-slate-400 text-sm">Status</span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-                      Successful
-                    </span>
+                    {selectedRecord.status === 'Successful' ? (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        Successful
+                      </span>
+                    ) : (
+                       <button
+                         onClick={() => handleVerify(selectedRecord)}
+                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors border border-blue-400/30"
+                       >
+                         <CheckCircle size={14} />
+                         Verify & Send Message
+                       </button>
+                    )}
                   </div>
                 </div>
                 

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { RefreshCw, Clock } from 'lucide-react';
 
 interface ProcessingStepProps {
+  key?: string;
   onComplete: () => void;
 }
 

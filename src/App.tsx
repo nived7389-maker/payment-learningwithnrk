@@ -9,18 +9,51 @@ import { AdminLoginStep } from './components/AdminLoginStep';
 import { AdminDashboardStep } from './components/AdminDashboardStep';
 
 export default function App() {
-  const [step, setStep] = useState<Step>('form');
-  const [formData, setFormData] = useState<FormData>({
-    selectedClass: null,
-    stream: null,
-    loginName: '',
-    phoneNumber: '',
-    txnId: '',
-    payerUpiId: ''
+  const [step, setStep] = useState<Step>(() => {
+    const savedStep = localStorage.getItem('currentStep') as Step;
+    if (savedStep === 'success') {
+      localStorage.setItem('currentStep', 'form');
+      return 'form';
+    }
+    return savedStep || 'form';
+  });
+  const [formData, setFormData] = useState<FormData>(() => {
+    const saved = localStorage.getItem('formData');
+    return saved ? JSON.parse(saved) : {
+      selectedClass: null,
+      stream: null,
+      loginName: '',
+      phoneNumber: '',
+      txnId: '',
+      payerUpiId: ''
+    };
   });
 
   const updateData = (data: Partial<FormData>) => {
-    setFormData(prev => ({ ...prev, ...data }));
+    setFormData(prev => {
+      const nextData = { ...prev, ...data };
+      localStorage.setItem('formData', JSON.stringify(nextData));
+      return nextData;
+    });
+  };
+
+  const handleSetStep = (newStep: Step) => {
+    setStep(newStep);
+    localStorage.setItem('currentStep', newStep);
+  };
+
+  const resetForm = () => {
+    const emptyData: FormData = {
+      selectedClass: null,
+      stream: null,
+      loginName: '',
+      phoneNumber: '',
+      txnId: '',
+      payerUpiId: ''
+    };
+    setFormData(emptyData);
+    localStorage.setItem('formData', JSON.stringify(emptyData));
+    handleSetStep('form');
   };
 
   return (
@@ -34,8 +67,8 @@ export default function App() {
               key="form"
               data={formData} 
               updateData={updateData} 
-              onNext={() => setStep('payment')} 
-              onAdminAccess={() => setStep('admin_login')}
+              onNext={() => handleSetStep('payment')} 
+              onAdminAccess={() => handleSetStep('admin_login')}
             />
           )}
           {step === 'payment' && (
@@ -43,30 +76,33 @@ export default function App() {
               key="payment"
               data={formData} 
               updateData={updateData} 
-              onNext={() => setStep('processing')}
-              onBack={() => setStep('form')}
+              onNext={() => handleSetStep('processing')}
+              onBack={() => handleSetStep('form')}
             />
           )}
           {step === 'processing' && (
             <ProcessingStep 
               key="processing"
-              onComplete={() => setStep('success')} 
+              onComplete={() => handleSetStep('success')} 
             />
           )}
           {step === 'success' && (
-            <SuccessStep key="success" data={formData} />
+            <SuccessStep 
+              key="success" 
+              data={formData} 
+            />
           )}
           {step === 'admin_login' && (
             <AdminLoginStep 
               key="admin_login"
-              onSuccess={() => setStep('admin_dashboard')}
-              onBack={() => setStep('form')}
+              onSuccess={() => handleSetStep('admin_dashboard')}
+              onBack={() => handleSetStep('form')}
             />
           )}
           {step === 'admin_dashboard' && (
             <AdminDashboardStep 
               key="admin_dashboard"
-              onBack={() => setStep('form')}
+              onBack={() => handleSetStep('form')}
             />
           )}
         </AnimatePresence>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, MessageCircle } from 'lucide-react';
+import { Check, MessageCircle, Home } from 'lucide-react';
 import { FormData } from '../types';
 import { db } from '../firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 
 interface SuccessStepProps {
+  key?: string;
   data: FormData;
 }
 
@@ -22,6 +23,7 @@ export function SuccessStep({ data }: SuccessStepProps) {
           const newRecord = {
             id: Date.now().toString(),
             ...data,
+            status: 'Pending Verification',
             timestamp: new Date().toISOString()
           };
           localRecords.push(newRecord);
@@ -33,6 +35,7 @@ export function SuccessStep({ data }: SuccessStepProps) {
         try {
           await addDoc(collection(db, "payments"), {
             ...data,
+            status: 'Pending Verification',
             timestamp: Timestamp.now()
           });
           setDataSaved(true);
@@ -120,7 +123,7 @@ export function SuccessStep({ data }: SuccessStepProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.5, type: "spring" }}
-          className="w-full pb-8"
+          className="w-full pb-8 space-y-3"
         >
           <button
             onClick={handleManualRedirect}
@@ -129,8 +132,9 @@ export function SuccessStep({ data }: SuccessStepProps) {
             <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
             Send Details to WhatsApp
           </button>
+
           <p className="text-xs text-emerald-100/90 mt-4 leading-relaxed px-4">
-            Click the button above if you haven't been redirected to WhatsApp automatically. We need these details to activate your account.
+            Click the WhatsApp button if you haven't been redirected automatically. We need these details to activate your account.
           </p>
         </motion.div>
       </motion.div>

@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Lock, ArrowRight, ArrowLeft } from 'lucide-react';
 
 interface AdminLoginStepProps {
+  key?: string;
   onSuccess: () => void;
   onBack: () => void;
 }
