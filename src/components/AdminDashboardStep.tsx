@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, Users, FileText, Activity } from 'lucide-react';
+import { ArrowLeft, Users, FileText, Activity, AlertTriangle } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 
@@ -11,6 +11,7 @@ interface AdminDashboardStepProps {
 export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRecords = async () => {
@@ -22,8 +23,18 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
           ...doc.data()
         }));
         setRecords(data);
-      } catch (error) {
-        console.error("Error fetching records: ", error);
+        setError(null);
+      } catch (error: any) {
+        console.error("Error fetching records from Firebase: ", error);
+        // Fallback to localStorage if Firebase fails
+        try {
+          const localRecords = JSON.parse(localStorage.getItem('payments') || '[]');
+          // Reverse to show newest first
+          setRecords(localRecords.reverse());
+          setError(null); // Clear error since we have local data fallback
+        } catch (localError) {
+          setError(error.message || "Failed to fetch records.");
+        }
       } finally {
         setLoading(false);
       }
@@ -76,7 +87,7 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
           </div>
           <div>
             <p className="text-slate-400 text-sm font-semibold">System</p>
-            <p className="text-3xl font-bold text-white">Active</p>
+            <p className="text-3xl font-bold text-white">{error ? 'Error' : 'Active'}</p>
           </div>
         </div>
       </div>
@@ -89,6 +100,16 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
         <div className="overflow-x-auto">
           {loading ? (
             <div className="p-8 text-center text-slate-400">Loading records...</div>
+          ) : error ? (
+            <div className="p-8 text-center flex flex-col items-center justify-center space-y-4">
+              <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center text-red-400">
+                <AlertTriangle size={32} />
+              </div>
+              <p className="text-red-400 font-medium">{error}</p>
+              <p className="text-slate-400 text-sm max-w-md">
+                It looks like your Firebase Security Rules are preventing access. Please go to your Firebase Console -&gt; Firestore Database -&gt; Rules, and ensure you have given read/write permissions for the "payments" collection.
+              </p>
+            </div>
           ) : records.length === 0 ? (
             <div className="p-8 text-center text-slate-400">No payment records found.</div>
           ) : (
@@ -96,6 +117,7 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
               <thead>
                 <tr className="bg-white/5 text-slate-400 text-sm font-medium">
                   <th className="px-6 py-4 border-b border-white/5">Login Name</th>
+                  <th className="px-6 py-4 border-b border-white/5">UPI ID</th>
                   <th className="px-6 py-4 border-b border-white/5">Contact</th>
                   <th className="px-6 py-4 border-b border-white/5">Class & Stream</th>
                   <th className="px-6 py-4 border-b border-white/5">TXN ID</th>
@@ -107,11 +129,14 @@ export function AdminDashboardStep({ onBack }: AdminDashboardStepProps) {
                   <tr key={record.id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs uppercase">
+                        <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs uppercase">
                           {record.loginName.charAt(0)}
                         </div>
                         <span className="font-semibold text-white">{record.loginName}</span>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-amber-200/80 font-medium font-mono">
+                      {record.payerUpiId || '-'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-slate-300">
                       {record.phoneNumber}

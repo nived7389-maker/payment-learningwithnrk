@@ -35,14 +35,14 @@ export function AdminLoginStep({ onSuccess, onBack }: AdminLoginStepProps) {
         >
           <ArrowLeft size={20} />
         </button>
-        <h2 className="text-xl font-bold text-white tracking-tight">Admin Portal</h2>
+        <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-blue-500 tracking-tight">Admin Portal</h2>
       </div>
 
       <div className="bg-[#0a0f1c] rounded-3xl p-8 border border-white/10 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
 
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 mx-auto mb-4">
+          <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500 mx-auto mb-4 border border-blue-500/20">
             <Lock size={32} />
           </div>
           <h3 className="text-2xl font-bold text-white">Restricted Access</h3>
@@ -59,7 +59,7 @@ export function AdminLoginStep({ onSuccess, onBack }: AdminLoginStepProps) {
                 setPassword(e.target.value);
                 setError(false);
               }}
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-center text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-mono tracking-widest"
+              className="w-full bg-[#040608] border border-white/10 rounded-2xl px-5 py-4 text-center text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-mono tracking-widest shadow-inner"
             />
             {error && (
               <p className="text-red-400 text-sm text-center">Incorrect password.</p>
@@ -68,7 +68,7 @@ export function AdminLoginStep({ onSuccess, onBack }: AdminLoginStepProps) {
 
           <button 
             type="submit"
-            className="w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/25"
+            className="w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)]"
           >
             Login <ArrowRight size={18} />
           </button>

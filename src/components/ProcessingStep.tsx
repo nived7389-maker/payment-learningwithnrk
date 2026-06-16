@@ -46,18 +46,16 @@ export function ProcessingStep({ onComplete }: ProcessingStepProps) {
       className="min-h-[80vh] flex flex-col items-center justify-center p-6 relative w-full max-w-md mx-auto"
     >
       <motion.div 
-        animate={{ rotate: 360 }}
+        animate={{ rotateY: 360 }}
         transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-        className="w-20 h-20 border-4 border-white/10 border-t-blue-500 rounded-full mb-6 relative shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+        className="w-24 h-24 mb-6 relative flex items-center justify-center shadow-[0_0_40px_rgba(245,158,11,0.5)] rounded-full bg-gradient-to-br from-amber-400 to-amber-600 border-4 border-amber-300"
       >
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <RefreshCw className="text-blue-500/50" size={24} />
-        </div>
+        <span className="text-amber-100 font-bold text-4xl drop-shadow-md">₹</span>
       </motion.div>
       
-      <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">Verifying Payment</h2>
-      <p className="text-slate-400 text-center max-w-xs mb-4">
-        Processing your transaction ID... {processTime > 0 ? `(${processTime}s)` : ''}
+      <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">100% Secure Payment</h2>
+      <p className="text-amber-200/80 text-center max-w-xs mb-4">
+        Processing your transaction... {processTime > 0 ? `(${processTime}s)` : ''}
       </p>
 
       <AnimatePresence>
@@ -73,22 +71,22 @@ export function ProcessingStep({ onComplete }: ProcessingStepProps) {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative bg-[#0a0f1c] border border-white/10 p-8 rounded-3xl shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)] max-w-sm w-full space-y-5 text-center"
+              className="relative bg-[#0a0f1c] border border-amber-500/20 p-8 rounded-3xl shadow-[0_0_40px_-10px_rgba(245,158,11,0.3)] max-w-sm w-full space-y-5 text-center"
             >
-              <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 mx-auto mb-4">
+              <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 mx-auto mb-4 border border-amber-500/30">
                 <Clock size={32} />
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">Activation Scheduled</h3>
+              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 tracking-tight">100% Secure Payment</h3>
               <p className="text-slate-300 leading-relaxed text-sm">
-                Activation will occur within 4 to 6 hours. Sorry for the delay.
+                Activation will occur within 4 to 6 hours.
               </p>
               <div className="pt-2">
-                <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                <div className="w-full bg-[#151923] rounded-full h-1.5 overflow-hidden">
                   <motion.div 
                     initial={{ width: "0%" }}
                     animate={{ width: "100%" }}
                     transition={{ duration: 3, ease: "linear" }}
-                    className="h-full bg-blue-500"
+                    className="h-full bg-gradient-to-r from-amber-600 to-yellow-500"
                   />
                 </div>
               </div>

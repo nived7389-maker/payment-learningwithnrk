@@ -16,6 +16,20 @@ export function SuccessStep({ data }: SuccessStepProps) {
   useEffect(() => {
     if (!dataSaved && data.txnId) {
       const saveData = async () => {
+        // Save to localStorage as a fallback/redundant local cache
+        try {
+          const localRecords = JSON.parse(localStorage.getItem('payments') || '[]');
+          const newRecord = {
+            id: Date.now().toString(),
+            ...data,
+            timestamp: new Date().toISOString()
+          };
+          localRecords.push(newRecord);
+          localStorage.setItem('payments', JSON.stringify(localRecords));
+        } catch (e) {
+          console.error("Error saving to localStorage", e);
+        }
+
         try {
           await addDoc(collection(db, "payments"), {
             ...data,
@@ -24,6 +38,8 @@ export function SuccessStep({ data }: SuccessStepProps) {
           setDataSaved(true);
         } catch (e) {
           console.error("Error saving to Firebase", e);
+          // If firebase fails, we at least have local storage now
+          setDataSaved(true); 
         }
       };
       saveData();
@@ -64,9 +80,9 @@ export function SuccessStep({ data }: SuccessStepProps) {
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
-        className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-6 mt-8 shadow-[0_0_40px_rgba(255,255,255,0.4)] shrink-0"
+        className="w-32 h-32 bg-white rounded-full flex items-center justify-center mb-6 mt-8 shadow-[0_0_50px_rgba(255,255,255,0.6)] border-[5px] border-emerald-100 shrink-0"
       >
-        <Check size={56} className="text-emerald-500" strokeWidth={3} />
+        <Check size={56} className="text-emerald-500" strokeWidth={4} />
       </motion.div>
 
       <motion.div
@@ -75,13 +91,17 @@ export function SuccessStep({ data }: SuccessStepProps) {
         transition={{ delay: 0.5, type: "spring" }}
         className="space-y-4 max-w-sm w-full"
       >
-        <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-md">Successfully Processing</h1>
+        <h1 className="text-5xl font-extrabold tracking-tight text-white drop-shadow-md pb-2">Successful</h1>
         
         <p className="text-emerald-50 text-lg font-medium tracking-wide">
-          Payment transaction successful
+          Payment transaction complete
         </p>
 
         <div className="bg-black/15 backdrop-blur-md rounded-2xl p-5 text-left space-y-3 mb-6 mt-2 text-sm text-emerald-50 shadow-inner border border-white/10">
+          <div className="flex justify-between border-b border-white/10 pb-2">
+            <span className="opacity-80">UPI ID</span>
+            <span className="font-semibold text-white">{data.payerUpiId}</span>
+          </div>
           <div className="flex justify-between border-b border-white/10 pb-2">
             <span className="opacity-80">Login Name</span>
             <span className="font-semibold text-white">{data.loginName}</span>
